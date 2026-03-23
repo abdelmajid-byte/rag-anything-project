@@ -18,6 +18,11 @@ from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 from loguru import logger
 
+# LightRAG/RAGAnything utilisent des structures récursives profondes
+# pour le traitement des chunks et l'extraction d'entités.
+# La limite par défaut (1000) est insuffisante pour les gros documents.
+sys.setrecursionlimit(10000)
+
 # Ajouter le dossier Scripts du venv au PATH pour que subprocess trouve "mineru"
 _venv_scripts = Path(sys.executable).parent
 if str(_venv_scripts) not in os.environ.get("PATH", ""):
