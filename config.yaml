@@ -4,15 +4,15 @@ description: "RAG-Anything multimodal (LightRAG + MinerU + Ollama, 100% local)"
 # ─── Ollama ───────────────────────────────────────────────────────────────────
 ollama:
   host: "http://localhost:11434"
-  llm_model:    "llama3.1:8b"    # LLM texte
+  llm_model:    "llama3.1:8b"    # LLM texte (8b = meilleure qualité de réponses)
   vision_model: "llava:7b"       # Vision/VLM pour les images
   embed_model:  "nomic-embed-text"  # 768 dimensions
   embed_dim:    768
 
-# ─── Parser (MinerU) ──────────────────────────────────────────────────────────
+# ─── Parser (Docling) ─────────────────────────────────────────────────────────
 parser:
-  backend:      "mineru"   # mineru | docling | paddleocr
-  parse_method: "txt"      # txt (rapide, texte seul) | auto (multimodal) | ocr
+  backend:      "docling"  # mineru | docling | paddleocr
+  parse_method: "auto"     # txt (rapide, texte seul) | auto (multimodal) | ocr
   device:       "cpu"      # cpu | cuda | cuda:0
   lang:         "fr"       # Langue principale pour l'OCR
   formula:      true       # Parser les formules mathematiques

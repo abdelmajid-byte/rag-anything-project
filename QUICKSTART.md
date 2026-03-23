@@ -1,136 +1,150 @@
-# Guide de Démarrage Rapide - RAG Benchmark
+# Guide de Démarrage Rapide - RAG-Anything
 
-## 🚀 Démarrage en 5 Minutes
+## Démarrage en 5 Minutes
 
-### 1. Installation d'Ollama et du Modèle
+### 1. Installation d'Ollama et des Modèles
 
-```powershell
+```bash
 # Télécharger Ollama depuis https://ollama.ai
-# Ou utiliser winget
+# Ou sous Windows via winget
 winget install Ollama.Ollama
 
-# Télécharger le modèle Llama 3.1:8b
-ollama pull llama3.1:8b
+# Télécharger les trois modèles requis
+ollama pull llama3.1:8b        # génération de texte
+ollama pull llava:7b           # analyse d'images (vision)
+ollama pull nomic-embed-text   # embeddings (768 dimensions)
 ```
 
 ### 2. Installation des Dépendances Python
 
-```powershell
+```bash
 # Créer et activer l'environnement virtuel
-python -m venv venv
-.\venv\Scripts\activate
+python -m venv anything
+# Windows
+.\anything\Scripts\activate
+# Linux/macOS
+source anything/bin/activate
 
 # Installer les dépendances
 pip install -r requirements.txt
 ```
 
-### 3. Ingestion des Documents
+### 3. Démarrer l'API
 
-```powershell
-# Charger et indexer les PDFs du dossier "données rag"
-python ingest_documents.py
-```
-
-**Temps estimé**: 2-5 minutes (selon le nombre de documents)
-
-### 4. Démarrer l'API
-
-```powershell
-# Démarrer le serveur API
+```bash
 python api.py
 ```
 
-L'API sera disponible sur: **http://localhost:8000**
+L'API sera disponible sur **http://localhost:8000** — Swagger UI sur **http://localhost:8000/docs**
 
-### 5. Tester avec Postman
+### 4. Ingérer les Documents
 
-#### Option A: Importer la Collection
-1. Ouvrir Postman
-2. Cliquer sur "Import"
-3. Sélectionner `postman_collection.json`
-4. Lancer les requêtes
+Placez vos PDFs dans le dossier `./donnees rag/`, puis lancez l'ingestion :
 
-#### Option B: Test Manuel
+```bash
+curl -X POST http://localhost:8000/ingest/folder
+```
 
-**Health Check:**
+> **Temps estimé** : 2–5 minutes selon le nombre de documents. Les données indexées sont persistées dans `data/rag_anything_storage/`.
+
+### 5. Tester l'API
+
+#### Health Check
 ```
 GET http://localhost:8000/health
 ```
 
-**Poser une Question:**
-```
-POST http://localhost:8000/query
-Content-Type: application/json
+#### Poser une Question
 
-{
-  "query": "Quelles sont les règles de TVA?",
-  "top_k": 5,
-  "temperature": 0.7,
-  "max_tokens": 512
-}
+```bash
+curl -X POST http://localhost:8000/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Quelles sont les règles de TVA?", "mode": "hybrid"}'
 ```
 
-## 📊 Exemples de Questions
+**Modes de requête disponibles :**
+| Mode | Description |
+|------|-------------|
+| `hybrid` | Local + global (recommandé) |
+| `naive` | Vectoriel pur |
+| `local` | Entités proches dans le graphe |
+| `global` | Thèmes transversaux |
 
-- "Quelles sont les obligations de facturation?"
-- "Que dit l'article 289 du CGI?"
-- "Comment déclarer la TVA?"
-- "Quelles sont les sanctions en cas de non-respect?"
+#### Avec Postman
 
-## 🔧 Résolution de Problèmes Courants
+1. Ouvrir Postman → **Import**
+2. Sélectionner `postman_collection.json`
+3. Lancer les requêtes préconfigurées
 
-### Erreur: "Impossible de se connecter à Ollama"
-```powershell
-# Vérifier qu'Ollama est en cours d'exécution
+---
+
+## Exemples de Questions
+
+- "Quelles sont les obligations de facturation ?"
+- "Que dit l'article 289 du CGI ?"
+- "Comment déclarer la TVA ?"
+- "Quelles sont les sanctions en cas de non-respect ?"
+
+---
+
+## Résolution de Problèmes Courants
+
+### "Impossible de se connecter à Ollama"
+```bash
+# Vérifier qu'Ollama tourne et que les modèles sont présents
 ollama list
 
-# Si le modèle n'est pas présent
+# Télécharger les modèles manquants
 ollama pull llama3.1:8b
+ollama pull llava:7b
+ollama pull nomic-embed-text
 ```
 
-### Erreur: "Vector store vide"
-```powershell
-# Exécuter d'abord l'ingestion
-python ingest_documents.py
+### "Vector store vide" / Réponses de mauvaise qualité
+```bash
+# Vérifier que des PDFs sont présents dans ./donnees rag/
+# puis relancer l'ingestion
+curl -X POST http://localhost:8000/ingest/folder
 ```
 
-### Erreur: "Module introuvable"
-```powershell
-# Réinstaller les dépendances
+### Vider le cache LLM (debug)
+Supprimer ou vider le fichier :
+```
+data/rag_anything_storage/kv_store_llm_response_cache.json
+```
+
+### "Module introuvable"
+```bash
 pip install -r requirements.txt --force-reinstall
 ```
 
-## 📈 Vérifier les Résultats
+---
 
-### Voir les Statistiques
+## Vérifier les Résultats
+
 ```
 GET http://localhost:8000/stats
+GET http://localhost:8000/docs    # Documentation interactive
 ```
 
-### Documentation Interactive
-Accéder à: **http://localhost:8000/docs**
+Logs disponibles dans `logs/`.
 
-## ✅ Checklist de Démarrage
+---
 
-- [ ] Ollama installé
-- [ ] Modèle llama3.1:8b téléchargé
-- [ ] Environnement virtuel Python créé
-- [ ] Dépendances installées
-- [ ] Documents ingérés (vector store créé)
-- [ ] API démarrée
-- [ ] Test avec Postman réussi
+## Checklist de Démarrage
 
-## 🎯 Prochaines Actions
+- [ ] Ollama installé et en cours d'exécution
+- [ ] Modèles `llama3.1:8b`, `llava:7b`, `nomic-embed-text` téléchargés
+- [ ] Environnement virtuel Python créé et activé
+- [ ] Dépendances installées (`pip install -r requirements.txt`)
+- [ ] PDFs placés dans `./donnees rag/`
+- [ ] API démarrée (`python api.py`)
+- [ ] Ingestion lancée (`POST /ingest/folder`)
+- [ ] Health check OK (`GET /health`)
+- [ ] Test de requête réussi (`POST /query`)
 
-1. **Tester plusieurs questions** pour évaluer la qualité
-2. **Ajuster les paramètres** (top_k, temperature) selon les résultats
-3. **Analyser les métriques** via `/stats`
-4. **Créer un jeu de test** avec questions et réponses attendues
-5. **Comparer avec d'autres modèles** (prochaine phase)
+---
 
-## 📞 Support
+## Configuration
 
-Si vous rencontrez des problèmes :
-1. Vérifier les logs dans `logs/rag_benchmark.log`
-2. Consulter le README.md complet
-3. Vérifier la configuration dans `config.yaml`
+Tous les paramètres sont dans `config.yaml` (modèles, chemins, mode de requête par défaut). Voir la section **Configuration** du `CLAUDE.md` pour les détails.

@@ -1,0 +1,63 @@
+# Jeu de Test pour l'Évaluation du RAG-Anything
+# Format: Question | Mots-clés attendus | Réponse attendue (ground_truth)
+
+questions:
+  - id: 1
+    query: "C'est quoi la date de Version en vigueur de CGI_Article 289?"
+    ground_truth: "La date de version en vigueur de l'article 289 du CGI correspond à la dernière mise à jour publiée dans le texte officiel du Code Général des Impôts."
+    keywords: ["article 289", "CGI", "version", "date", "en vigueur"]
+    mode: hybrid
+
+  - id: 2
+    query: "Sur quelle période porte l'audit pour une première immatriculation ?"
+    ground_truth: "Pour une première immatriculation, l'audit porte sur une période définie par les textes réglementaires relatifs à la certification ou à l'immatriculation de l'opérateur."
+    keywords: ["audit", "période", "première immatriculation"]
+    mode: hybrid
+
+  - id: 3
+    query: "Quels sont les trois formats obligatoires pour transmettre les factures électroniques?"
+    ground_truth: "Les trois formats obligatoires pour la transmission des factures électroniques sont définis par la réglementation française sur la facturation électronique (e-invoicing)."
+    keywords: ["formats", "factures électroniques", "transmission", "obligatoires"]
+    mode: hybrid
+
+  - id: 4
+    query: "Quelle certification de sécurité peut être exigée pour l'opérateur ?"
+    ground_truth: "Une certification de sécurité spécifique peut être exigée pour l'opérateur de dématérialisation, conformément aux exigences réglementaires. La qualification SecNumCloud délivrée par l'ANSSI peut être exigée pour les prestataires d'hébergement en nuage, et la certification ISO/IEC/27001 est requise pour l'infrastructure informatique."
+    keywords: ["certification", "sécurité", "opérateur", "SecNumCloud", "ISO/IEC/27001", "ANSSI"]
+    mode: hybrid
+
+  - id: 5
+    query: "Quel est l'un des objectifs de la directive 2010/45/UE du 13 juillet 2010 ?"
+    ground_truth: "L'un des objectifs de la directive 2010/45/UE est de simplifier, moderniser et harmoniser les règles relatives à la facturation en matière de TVA, notamment en favorisant la facturation électronique."
+    keywords: ["directive 2010/45/UE", "13 juillet 2010", "objectifs", "TVA"]
+    mode: global
+
+  - id: 6
+    query: "Quels contrôles doivent être mis en place pour garantir l'authenticité et l'intégrité des factures électroniques ?"
+    ground_truth: "Pour garantir l'authenticité, l'intégrité et la lisibilité des factures électroniques, des contrôles doivent être mis en place par les assujettis. Ces contrôles reposent sur une piste d'audit fiable ou des procédés technologiques sécurisés."
+    keywords: ["authenticité", "intégrité", "lisibilité", "contrôles", "piste d'audit", "assujettis"]
+    mode: hybrid
+
+  - id: 7
+    query: "Qu'est-ce qu'une plateforme de dématérialisation partenaire (PDP) ?"
+    ground_truth: "Une plateforme de dématérialisation partenaire (PDP) est un opérateur privé immatriculé par l'administration fiscale, habilité à émettre, transmettre et recevoir des factures électroniques dans le cadre de la réforme de la facturation électronique en France."
+    keywords: ["PDP", "plateforme", "dématérialisation", "immatriculation"]
+    mode: local
+
+  - id: 8
+    query: "Quel est le rôle du Portail Public de Facturation (PPF) ?"
+    ground_truth: "Le Portail Public de Facturation (PPF) est la plateforme publique gérée par l'État qui centralise les flux de facturation électronique entre entreprises."
+    keywords: ["PPF", "portail public", "facturation", "État"]
+    mode: global
+
+  - id: 9
+    query: "Quelles sont les obligations de l'émetteur d'une facture électronique en matière de conservation ?"
+    ground_truth: "L'émetteur d'une facture électronique doit conserver les factures émises pendant une durée minimale de 6 ans, en garantissant l'authenticité, l'intégrité et la lisibilité des documents."
+    keywords: ["conservation", "facture électronique", "émetteur", "durée", "authenticité"]
+    mode: hybrid
+
+  - id: 10
+    query: "À partir de quelle date la facturation électronique devient-elle obligatoire pour les grandes entreprises en France ?"
+    ground_truth: "La facturation électronique devient obligatoire pour les grandes entreprises françaises à la réception à partir de septembre 2026, selon le calendrier progressif défini par la réforme."
+    keywords: ["facturation électronique", "obligatoire", "grandes entreprises", "date", "calendrier"]
+    mode: hybrid

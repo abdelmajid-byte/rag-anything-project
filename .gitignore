@@ -25,11 +25,11 @@ wheels/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
 
 # Environment
 .env
 .venv
+anything/
 
 # IDEs
 .vscode/
@@ -52,8 +52,8 @@ data/rag_anything_storage/
 # Generated outputs
 output/
 
-# Source documents (données brutes)
-données rag/
+# Source documents — garder les PDFs dans le repo pour Colab
+# données rag/
 
 # Models (si téléchargés localement)
 models/

@@ -1,0 +1,196 @@
+
+{
+  "info": {
+    "name": "RAG-Anything API v4",
+    "description": "Collection Postman pour tester l'API RAG-Anything (LightRAG + MinerU + Ollama)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["health"]
+        },
+        "description": "Vérifie l'état du système : modèles Ollama, index RAG-Anything, configuration"
+      }
+    },
+    {
+      "name": "Query - TVA (hybrid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelles sont les règles de TVA pour les entreprises?\",\n  \"mode\": \"hybrid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Requête hybride (local + global) sur les règles de TVA"
+      }
+    },
+    {
+      "name": "Query - Article 289 (hybrid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Que dit l'article 289 du CGI?\",\n  \"mode\": \"hybrid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Question sur l'article 289 du Code Général des Impôts"
+      }
+    },
+    {
+      "name": "Query - Facturation électronique (hybrid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelles sont les obligations de facturation électronique?\",\n  \"mode\": \"hybrid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Question sur les obligations de facturation électronique"
+      }
+    },
+    {
+      "name": "Query - Formats obligatoires factures (hybrid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quels sont les trois formats obligatoires pour transmettre les factures électroniques?\",\n  \"mode\": \"hybrid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Recherche les trois formats obligatoires pour la transmission des factures électroniques"
+      }
+    },
+    {
+      "name": "Query - PDP (local)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Qu'est-ce qu'une plateforme de dématérialisation partenaire (PDP) ?\",\n  \"mode\": \"local\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Mode local : entites proches - question sur les PDP"
+      }
+    },
+    {
+      "name": "Query - PPF (global)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quel est le rôle du Portail Public de Facturation (PPF) ?\",\n  \"mode\": \"global\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Mode global : themes transversaux - question sur le PPF"
+      }
+    },
+    {
+      "name": "Query - Audit immatriculation (naive)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Sur quelle période porte l'audit pour une première immatriculation ?\",\n  \"mode\": \"naive\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Mode naive : RAG classique vectoriel"
+      }
+    },
+    {
+      "name": "Query - VLM Enhanced (avec analyse visuelle)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quels sont les contrôles pour garantir l'authenticité des factures électroniques?\",\n  \"mode\": \"hybrid\",\n  \"vlm_enhanced\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query"]
+        },
+        "description": "Requête avec analyse visuelle activée (LLaVA analyse les images du contexte)"
+      }
+    },
+    {
+      "name": "Query Multimodale - Tableau",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Analysez ce tableau de données de facturation\",\n  \"multimodal_content\": [\n    {\n      \"type\": \"table\",\n      \"table_body\": \"Format,Obligatoire,Date\\nFactur-X,Oui,2026\\nUBL,Oui,2026\\nCII,Oui,2026\",\n      \"table_caption\": [\"Formats obligatoires factures électroniques\"]\n    }\n  ],\n  \"mode\": \"hybrid\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/query/multimodal",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["query", "multimodal"]
+        },
+        "description": "Requête multimodale avec un tableau de données"
+      }
+    }
+  ]
+}
