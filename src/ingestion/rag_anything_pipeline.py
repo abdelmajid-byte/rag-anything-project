@@ -102,34 +102,33 @@ load_dotenv()
 # y compris list/header/footer/page_number qui ne contiennent ni image, ni
 # tableau, ni équation. Cela génère des appels LLM inutiles et des erreurs.
 # On ne garde comme multimodal que les vrais types riches.
+#
+# NOTE: On ne délègue PAS à l'originale pour éviter une récursion infinie
+# (l'originale peut rappeler separate_content depuis le module patché).
+# On reproduit directement la logique de séparation text/multimodal.
 _REAL_MULTIMODAL_TYPES = {"image", "table", "equation"}
-_original_separate_content = _rag_utils.separate_content
 
 def _filtered_separate_content(content_list):
-    """Filtre les éléments structurels (header/footer/list/page_number) pour
-    éviter des appels LLM inutiles sur du contenu non analysable, tout en
-    conservant leur contenu textuel."""
-    filtered = []
+    """Sépare le contenu en text_content et multimodal_content.
+    Les éléments structurels (header/footer/list/page_number) sont forcés en texte."""
+    text_content = []
+    multimodal_content = []
     for item in content_list:
         item_type = item.get("type", "text")
-        # Les vrais multimodaux restent tels quels
         if item_type in _REAL_MULTIMODAL_TYPES:
-            filtered.append(item)
-        # Tout le reste est forcé en type "text"
+            multimodal_content.append(item)
         else:
             new_item = dict(item)
             new_item["type"] = "text"
-            filtered.append(new_item)
-    return _original_separate_content(filtered)
+            text_content.append(new_item)
+    return text_content, multimodal_content
 
 _rag_utils.separate_content = _filtered_separate_content
-# Patch aussi dans le module raganything.raganything qui l'a déjà importé
 try:
     import raganything.raganything as _rag_module
     _rag_module.separate_content = _filtered_separate_content
 except Exception:
     pass
-# Patch dans le module processor qui l'a importé directement
 try:
     import raganything.processor as _processor_module
     _processor_module.separate_content = _filtered_separate_content
